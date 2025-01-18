@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Lista de Etapas</h1>
+    <br>
+    <div class="d-flex justify-content-between">
+        <div class="btn-group" style="gap: 5px;">
+            <a href="{% url 'fase_lista' %}" class="btn btn-secondary">Regresar a fases</a>
+            <a href="{% url 'proyecto_lista' %}" class="btn btn-secondary">Regresar a proyecto</a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between mt-2">
+        <div>
+            <a href="{% url 'crear_etapa' %}" class="btn btn-outline-info">Nueva Etapa</a>
+        </div>
+        <div class="input-group" style="max-width: 250px;">
+            <input type="text" class="form-control" placeholder="Nombre" aria-label="Buscar por nombre" aria-describedby="buscar-proyecto" id="input-nombre" style="padding: 0px;">
+            <button class="btn btn-outline-secondary" type="button" id="buscar-etapa">Buscar</button>
+        </div>
+    </div>
+</div>
+<div class="m-2">
+    <div class="col-md-12">
+        {% if etapas %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Fase</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for etapa in etapas %}
+                    <tr>
+                        <td>{{ etapa.nombre }}</td>
+                        <td>{{ etapa.fase }}</td>
+                        <td>{{ etapa.descripcion }}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'etapa_editar' etapa.pk %}" class="btn btn-info">Editar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h5>No hay etapas disponibles</h5>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const inputNombre = document.getElementById('input-nombre');
+
+    inputNombre.addEventListener('input', function() {
+        const nombre = this.value.trim().toLowerCase();
+        
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const nombreEtapa = row.querySelector('td:nth-child(1)').innerText.toLowerCase();
+            if (nombreEtapa.includes(nombre)) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+{% endblock content %}

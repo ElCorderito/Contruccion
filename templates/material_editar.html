@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Editar Material</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_nombre" class="form-label">Nombre del Material:</label>
+            <input type="text" class="form-control" id="id_nombre" name="nombre" value="{{ form.nombre.value }}" placeholder="{{ form.nombre.field.widget.attrs.placeholder }}">
+        </div>
+        <div class="mb-3">
+            <label for="id_unidad" class="form-label">Unidad de Medida:</label>
+            <input type="text" class="form-control" id="id_unidad" name="unidad" value="{{ form.unidad.value }}" placeholder="{{ form.unidad.field.widget.attrs.placeholder }}">
+        </div>
+        <div class="mb-3">
+            <label for="id_categoria" class="form-label">Categoría:</label>
+            <select class="form-select" id="id_categoria" name="categoria" value="{{ form.categoria.value }}">
+                {% for option in form.categoria.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.categoria.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="id_clasificacion" class="form-label">Clasificación:</label>
+            <select class="form-select" id="id_clasificacion" name="clasificacion" value="{{ form.clasificacion.value }}">
+                {% for option in form.clasificacion.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.clasificacion.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="id_descripcion" class="form-label" >Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}" rows="3">{{ form.descripcion.value }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{% url 'material_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="m-2">
+    <h1>Crear Proyecto</h1>
+    <!-- Mensaje de error -->
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}  <!-- Mostrar errores generales -->
+
+        <div class="mb-3">
+            <label for="id_nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="id_nombre" name="nombre" placeholder="{{ form.nombre.field.widget.attrs.placeholder }}">
+            {{ form.nombre.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <div class="mb-3">
+            <label for="fecha_inicio" class="form-label">Fecha de Inicio:</label>
+            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" value="{{ form.fecha_inicio.value }}">
+            {{ form.fecha_inicio.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <div class="mb-3">
+            <label for="fecha_fin" class="form-label">Fecha de Fin:</label>
+            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="{{ form.fecha_fin.value }}">
+            {{ form.fecha_fin.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}" rows="3"></textarea>
+            {{ form.descripcion.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <button type="submit" class="btn btn-primary">Crear Proyecto</button>
+        <a href="{% url 'proyecto_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script>
+    // Establece la fecha de hoy en el campo de fecha de inicio
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('fecha_inicio').value = today;
+    });
+</script>
+
+{% endblock content %}

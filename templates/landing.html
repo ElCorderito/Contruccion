@@ -1,0 +1,18 @@
+{% extends 'base_login.html' %}
+{% load static %} <!-- Cargar la etiqueta static -->
+
+{% block content %}
+
+<!-- Contenido principal del Landing Page -->
+
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <!-- Logo de la empresa CIBBAS -->
+        <img src="{% static 'images/la_ultima.png' %}" alt="Logo de CIBBAS" class="img-fluid mb-4" style="max-width: 150px;">
+        <h3 class="mb-4">Bienvenido a CIBAAS</h3>
+        <p>Construimos el futuro con soluciones innovadoras. Crea tu cuenta o inicia sesión para gestionar nuestros proyectos y recursos de manera eficiente.</p>
+    </div>
+</div>
+
+
+{% endblock %}

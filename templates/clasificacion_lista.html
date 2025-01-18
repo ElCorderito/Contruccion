@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Lista de Clasificación</h1>
+    <br>
+    <div class="d-flex align-items-center">
+        <div class="btn-group" style="gap: 5px;">
+            <a href="{% url 'crear_clasificacion' %}" class="btn btn-outline-info">Nueva clasificación</a>
+            <a href="{% url 'material_lista' %}" class="btn btn-secondary">Regresar a materiales</a>
+        </div>
+        <div class="input-group ms-auto" style="max-width: 250px;">
+            <input type="text" class="form-control" placeholder="Nombre" aria-label="Buscar por nombre" aria-describedby="buscar-clasificacion" id="input-nombre" style="padding: 0px;">
+            <button class="btn btn-outline-secondary" type="button" id="buscar-clasificacion">Buscar</button>
+        </div>
+    </div>
+</div>
+<div class="m-2">
+    <div class="col-md-12">
+        {% if clasificaciones %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for clasificacion in clasificaciones %}
+                    <tr>
+                        <td>{{ clasificacion.nombre }}</td>
+                        <td>{{ clasificacion.descripcion }}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'clasificacion_editar' clasificacion.pk %}" class="btn btn-info">Editar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h5>No hay clasificación disponibles</h5>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const inputNombre = document.getElementById('input-nombre');
+
+    inputNombre.addEventListener('input', function() {
+        const nombre = this.value.trim().toLowerCase();
+        
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const nombreClasificacion = row.querySelector('td:nth-child(1)').innerText.toLowerCase();
+            if (nombreClasificacion.includes(nombre)) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Editar Etapa</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="id_nombre" name="nombre" value="{{ form.nombre.value }}" placeholder="{{ form.nombre.field.widget.attrs.placeholder }}">
+        </div>
+        <div class="mb-3">
+            <label for="id_fase" class="form-label">Fase:</label>
+            <select class="form-select" id="id_fase" name="fase" value="{{ form.fase.value }}">
+                {% for option in form.fase.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.fase.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}" rows="3">{{ form.descripcion.value }} </textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Editar Etapa</button>
+        <a href="{% url 'etapa_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock content %}

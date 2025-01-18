@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .custom-btn {
+            height: 195px;
+            width: 100%;
+            background-size: contain; /* Ajustar sin cortar */
+            background-repeat: no-repeat; /* No repetir la imagen */
+            background-position: center; /* Centrar la imagen */
+            border: 1px solid #ccc; /* Estilo adicional para destacar el botón */
+        }
+        .text-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-top: 10px; /* Espacio entre el botón y el texto */
+        }
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .menu-item {
+            flex-basis: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
+        }
+        @media (min-width: 576px) { /* Pantallas pequeñas y más grandes */
+            .menu-item {
+                flex-basis: 50%; /* Dos elementos por fila */
+            }
+        }
+        @media (min-width: 768px) { /* Pantallas medianas y más grandes */
+            .menu-item {
+                flex-basis: 32%; /* Tres elementos por fila */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="m-2">
+        <h1>Inicio</h1>
+        <div class="menu-container">
+            <div class="menu-item">
+                <a href="{% url 'proyecto_lista' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/cono.png' %}');"></a>
+                <div class="text-title">Proyectos</div>
+            </div>
+            <div class="menu-item">
+                <a href="{% url 'inventario_lista' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/10469240.png' %}');"></a>
+                <div class="text-title">Inventario</div>
+            </div>
+            <div class="menu-item">
+                <a href="{% url 'generar_reporte' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/8480222.png' %}');"></a>
+                <div class="text-title">Reportes</div>
+            </div>
+            <div class="menu-item">
+                <a href="{% url 'material_lista' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/mate.png' %}');"></a>
+                <div class="text-title">Materiales</div>
+            </div>
+            <div class="menu-item">
+                <a href="" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/none.png' %}');"></a>
+                <div class="text-title">###</div>
+            </div>
+            <div class="menu-item">
+                <a href="" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/none.png' %}');"></a>
+                <div class="text-title">###</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock content %}

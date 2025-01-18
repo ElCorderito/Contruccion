@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Lista de Materiales</h1>
+    <br>
+    <div class="d-flex justify-content-between">
+        <div class="btn-group" style="gap: 5px;">
+            <a href="{% url 'categoria_lista' %}" class="btn btn-outline-info">Categoria</a>
+            <a href="{% url 'clasificacion_lista' %}" class="btn btn-outline-info">Clasificación</a>
+            <a href="{% url 'tienda_lista' %}" class="btn btn-outline-info">Tienda</a>
+            <a href="{% url 'proveedor_lista' %}" class="btn btn-outline-info">Proveedores</a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between mt-2">
+        <div>
+            <a href="{% url 'crear_material' %}" class="btn btn-outline-info">Nuevo material</a>
+        </div>
+
+        <form method="GET" class="input-group" style="max-width: 400px;">
+            <input type="text" class="form-control" name="q" value="{{ q|default_if_none:'' }}" placeholder="Buscar por nombre" aria-label="Buscar por nombre" aria-describedby="buscar-material" id="input-nombre" style="padding: 0px;">
+            <button class="btn btn-outline-secondary" type="submit" id="buscar-material">Buscar</button>
+        </form>
+    </div>
+</div>
+<div class="m-2 table-responsive">
+    <div class="col-md-12">
+        {% if materiales %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Unidad</th>
+                        <th>Categoria</th>
+                        <th>Clasificación</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in materiales %}
+                    <tr>
+                        <td>{{ material.nombre }}</td>
+                        <td>{{ material.unidad }}</td>
+                        <td>{{ material.categoria }}</td>
+                        <td>{{ material.clasificacion }}</td>
+                        <td>{{ material.descripcion }}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'material_editar' material.pk %}" class="btn btn-info">Editar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <nav aria-label="Navegación de página">
+                <ul class="pagination justify-content-center">
+                    {% if materiales.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if q %}&q={{ q }}{% endif %}" aria-label="Primera">
+                                &laquo; Primera
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ materiales.previous_page_number }}{% if q %}&q={{ q }}{% endif %}" aria-label="Antes">
+                                Antes
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                &laquo; Primera
+                            </span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                Antes
+                            </span>
+                        </li>
+                    {% endif %}
+            
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Página {{ materiales.number }} de {{ materiales.paginator.num_pages }}
+                            <span class="sr-only">(actual)</span>
+                        </span>
+                    </li>
+            
+                    {% if materiales.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ materiales.next_page_number }}{% if q %}&q={{ q }}{% endif %}" aria-label="Siguiente">
+                                Siguiente
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ materiales.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}" aria-label="Última">
+                                Última &raquo;
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                Siguiente
+                            </span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                Última &raquo;
+                            </span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+        {% else %}
+            <h5>No hay materiales disponibles</h5>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}
+
+
+

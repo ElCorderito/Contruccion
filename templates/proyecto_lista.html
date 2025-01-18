@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Lista de Proyectos</h1>
+    <br>
+    <div class="d-flex justify-content-between">
+        <div class="btn-group" style="gap: 5px;">
+            <a href="{% url 'fase_lista' %}" class="btn btn-outline-info">Fases</a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between mt-2">
+        <div>
+            <a href="{% url 'crear_proyecto' %}" class="btn btn-outline-info">Nuevo proyecto</a>
+        </div>
+    
+        <div class="input-group" style="max-width: 400px;">
+            <input type="text" class="form-control" placeholder="Nombre" aria-label="Buscar por nombre" aria-describedby="buscar-proyecto" id="input-nombre" style="padding: 0px;">
+                <button class="btn btn-outline-secondary" type="button" id="buscar-proyecto">Buscar</button>
+        </div>
+    </div>
+</div>
+<div class="m-2">
+    <div class="col-md-12">
+        <h2>Proyectos en Proceso</h2>
+        {% if proyectos_en_proceso %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Fecha de Fin</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proyecto in proyectos_en_proceso %}
+                    <tr>
+                        <td>{{ proyecto.nombre }}</td>
+                        <td>{{ proyecto.fecha_inicio }}</td>
+                        <td>{{ proyecto.fecha_fin }}</td>
+                        <td>{{ proyecto.descripcion }}</td>
+                        <td>
+                            <div class="btn-group" role="group" style="gap: 5px;">
+                                <a href="{% url 'proyecto_detalle' proyecto.pk %}" class="btn btn-info">Ver Detalles</a>
+                                <form method="post" action="{% url 'cambiar_estado_proyecto' proyecto.pk %}" onsubmit="return confirm('¿Estás seguro de que quieres marcar este proyecto como terminado?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">Marcar como Terminado</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay proyectos en proceso.</p>
+        {% endif %}
+
+        <h2>Proyectos Terminados</h2>
+        {% if proyectos_terminados %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Fecha de Fin</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proyecto in proyectos_terminados %}
+                    <tr>
+                        <td>{{ proyecto.nombre }}</td>
+                        <td>{{ proyecto.fecha_inicio }}</td>
+                        <td>{{ proyecto.fecha_fin }}</td>
+                        <td>{{ proyecto.descripcion }}</td>
+                        <td><a href="{% url 'proyecto_detalle' proyecto.pk %}" class="btn btn-info">Ver Detalles</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay proyectos terminados.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const inputNombre = document.getElementById('input-nombre');
+
+    inputNombre.addEventListener('input', function() {
+        const nombre = this.value.trim().toLowerCase();
+        
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const nombreProyecto = row.querySelector('td:nth-child(1)').innerText.toLowerCase();
+            if (nombreProyecto.includes(nombre)) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+{% endblock content %}
+

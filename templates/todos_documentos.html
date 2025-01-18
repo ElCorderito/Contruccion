@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Todos los Documentos de los Proyectos</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Proyecto</th>
+                <th>Descripción del Documento</th>
+                <th>Nombre del Archivo</th>
+                <th>Fecha de Subida</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for documento in documentos %}
+            <tr>
+                <td>{{ documento.proyecto.nombre }}</td>
+                <td>{{ documento.descripcion|default_if_none:"Sin descripción" }}</td>
+                <td><a href="{{ documento.documento.url }}">{{ documento.documento.name }}</a></td>
+                <td>{{ documento.fecha_subida }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No hay documentos disponibles.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

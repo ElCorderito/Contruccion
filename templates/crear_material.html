@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="m-2">
+    <h1>Crear Material</h1>
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="mb-3">
+            <label for="id_nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="id_nombre" name="nombre" placeholder="{{ form.nombre.field.widget.attrs.placeholder }}">
+            {{ form.nombre.errors }}
+        </div>
+        <div class="mb-3">
+            <label for="id_unidad" class="form-label">Unidad de Medida:</label>
+            <input type="text" class="form-control" id="id_unidad" name="unidad" placeholder="{{ form.unidad.field.widget.attrs.placeholder }}">
+            {{ form.unidad.errors }}
+        </div>
+        <div class="mb-3">
+            <label for="id_categoria" class="form-label">Categoría:</label>
+            <select class="form-select" id="id_categoria" name="categoria">
+                <option selected>Elige...</option>
+                {% for option in form.categoria.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.categoria.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.categoria.errors }}
+        </div>
+        <div class="mb-3">
+            <label for="id_clasificacion" class="form-label">Clasificación:</label>
+            <select class="form-select" id="id_clasificacion" name="clasificacion">
+                <option selected>Elige...</option>
+                {% for option in form.clasificacion.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.clasificacion.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.clasificacion.errors }}
+        </div>
+        <div class="mb-3">
+            <label for="id_descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}" rows="3"></textarea>
+            {{ form.descripcion.errors }} 
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Material</button>
+        <a href="{% url 'material_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+{% endblock content %}

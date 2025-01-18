@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="m-2">
+    <h1>Crear Inventario</h1>
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}  <!-- Mostrar errores generales -->
+        
+        <div class="mb-3">
+            <label for="id_material" class="form-label">Material:</label>
+            <select class="form-select" id="id_material" name="material">
+                <option selected>Elige...</option>
+                {% for option in form.material.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.material.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.material.errors }}  <!-- Mostrar errores de campo -->
+        </div>
+
+        <div class="mb-3">
+            <label for="id_proyecto" class="form-label">Proyecto:</label>
+            <select class="form-select" id="id_proyecto" name="proyecto">
+                <option selected>Elige...</option>
+                {% for option in form.proyecto.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.proyecto.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.proyecto.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_etapa" class="form-label">Etapa:</label>
+            <select class="form-select" id="id_etapa" name="etapa">
+                <option selected>Elige...</option>
+                {% for option in form.etapa.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.etapa.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.etapa.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_cantidad" class="form-label">Cantidad:</label>
+            <input type="number" class="form-control" id="id_cantidad" name="cantidad" placeholder="{{ form.cantidad.field.widget.attrs.placeholder }}">
+            {{ form.cantidad.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_precio_unitario" class="form-label">Precio Unitario:</label>
+            <input type="number" class="form-control" id="id_precio_unitario" name="precio_unitario" placeholder="{{ form.precio_unitario.field.widget.attrs.placeholder }}">
+            {{ form.precio_unitario.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_descuento" class="form-label">Descuento (%):</label>
+            <input type="number" class="form-control" id="id_descuento" name="descuento" placeholder="{{ form.descuento.field.widget.attrs.placeholder }}">
+            {{ form.descuento.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_iva" class="form-label">IVA:</label>
+            <select class="form-select" id="id_iva" name="iva">
+                <option selected>Elige...</option>
+                {% for value, display in form.iva.field.choices %}
+                    <option value="{{ value }}" {% if value == form.iva.value %}selected{% endif %}>
+                        {{ display }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.iva.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_tienda" class="form-label">Tienda:</label>
+            <select class="form-select" id="id_tienda" name="tienda">
+                <option selected>Elige...</option>
+                <option value="">Ninguna</option>
+                {% for option in form.tienda.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.tienda.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.tienda.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_proveedor" class="form-label">Proveedor:</label>
+            <select class="form-select" id="id_proveedor" name="proveedor">
+                <option selected>Elige...</option>
+                <option value="">Ninguno</option>
+                {% for option in form.proveedor.field.queryset %}
+                    <option value="{{ option.pk }}" {% if option.pk == form.proveedor.value %}selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.proveedor.errors }}
+        </div>
+
+        <div class="mb-3 form-check">
+            {{ form.facturado }} 
+            <label class="form-check-label" for="id_facturado">¿Está facturado?</label>
+            {{ form.facturado.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha de Compra:</label>
+            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ form.fecha.value }}">
+            {{ form.fecha.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}" rows="3"></textarea>
+            {{ form.descripcion.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Crear Inventario</button>
+        <a href="{% url 'inventario_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script>
+    // Establece la fecha de hoy en el campo de fecha de inicio
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('fecha').value = today;
+    });
+</script>
+
+{% endblock content %}

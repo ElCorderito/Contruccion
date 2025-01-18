@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Generar Reporte</h1>
+<form method="GET" action=".">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="id_proyecto">Proyecto:</label>
+            {{ form.proyecto }}
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="id_fecha_inicio">Fecha de Inicio:</label>
+            {{ form.fecha_inicio }}
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="id_fecha_fin">Fecha de Fin:</label>
+            {{ form.fecha_fin }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="id_categoria">Categoría (Opcional):</label>
+            {{ form.categoria }}
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="id_clasificacion">Clasificación (Opcional):</label>
+            {{ form.clasificacion }}
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="id_tienda">Tienda (Opcional):</label>
+            {{ form.tienda }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="id_proveedor">Proveedor (Opcional):</label>
+            {{ form.proveedor }}
+        </div>
+    </div>
+
+    <!-- Botones para previsualizar o generar PDF -->
+    <div class="d-flex justify-content-start mt-4">
+        <button type="submit" name="preview" value="1" class="btn btn-primary me-3">Previsualizar</button>
+        <button type="submit" name="generar_pdf" value="1" class="btn btn-success">Generar PDF</button>
+    </div>
+</form>
+
+{% endblock %}
+
+

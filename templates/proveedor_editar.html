@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Editar Proveedor</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="id_nombre" name="nombre" value="{{ form.nombre.value }}" placeholder="{{ form.nombre.field.widget.attrs.placeholder }}">
+        </div>
+        <div class="mb-3">
+            <label for="id_contacto" class="form-label">Contacto:</label>
+            <input type="text" class="form-control" id="id_contacto" name="contacto" value="{{ form.contacto.value }}" placeholder="{{ form.contacto.field.widget.attrs.placeholder }}">
+        </div>
+        <div class="mb-3">
+            <label for="id_direccion" class="form-label">Dirección:</label>
+            <input type="text" class="form-control" id="id_direccion" name="direccion" value="{{ form.direccion.value }}" placeholder="{{ form.direccion.field.widget.attrs.placeholder }}">
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}" rows="3">{{ form.descripcion.value }} </textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Editar Proveedor</button>
+        <a href="{% url 'proveedor_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock content %}

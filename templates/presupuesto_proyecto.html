@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Presupuesto del Proyecto: {{ proyecto.nombre }}</h1>
+        <a href="{% url 'proyecto_detalle' proyecto.pk %}" class="btn btn-secondary">Volver a Detalles del Proyecto</a>
+    </div>
+
+    {% if presupuesto %}
+        <ul class="list-group mt-4">
+            <li class="list-group-item"><strong>Monto Total:</strong> {{ presupuesto.monto_total }}$</li>
+            <li class="list-group-item"><strong>Monto Gastado:</strong> {{ presupuesto.monto_gastado }}$</li>
+            <li class="list-group-item"><strong>Monto Restante:</strong> {{ monto_restante }}$</li>
+            <li class="list-group-item"><strong>Descripción:</strong> {{ presupuesto.descripcion|default_if_none:"Sin descripción" }}</li>
+        </ul>
+    {% else %}
+        <p>No hay presupuesto asociado con este proyecto.</p>
+    {% endif %}
+
+    <a href="{% url 'proyecto_lista' %}" class="btn btn-secondary mt-3">Volver a la lista de proyectos</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Editar Presupuesto</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <!-- Cambiar 'presupuesto_proyecto' a 'proyecto_detalle' -->
+        <a href="{% url 'proyecto_detalle' form.instance.proyecto.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock content %}

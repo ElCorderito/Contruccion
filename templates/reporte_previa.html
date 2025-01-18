@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Previsualización del Reporte</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Material</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+            <th>Fecha</th>
+            <th>Tienda</th>
+            <th>Proveedor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inventario in inventarios %}
+        <tr>
+            <td>{{ inventario.material.nombre }}</td>
+            <td>{{ inventario.cantidad }}</td>
+            <td>{{ inventario.precio_unitario }}$</td>
+            <td>{{ inventario.subtotal }}$</td>
+            <td>{{ inventario.fecha }}</td>
+            <td>{{ inventario.tienda.nombre|default_if_none:"-" }}</td>
+            <td>{{ inventario.proveedor.nombre|default_if_none:"-" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Total Gasto: {{ total_gasto }}$</h3>
+
+<!-- Mantener los filtros y generar el PDF en esta misma página -->
+<form method="GET" action=".">
+    <!-- Mantener los filtros actuales -->
+    <input type="hidden" name="proyecto" value="{{ request.GET.proyecto }}">
+    <input type="hidden" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}">
+    <input type="hidden" name="fecha_fin" value="{{ request.GET.fecha_fin }}">
+    <input type="hidden" name="categoria" value="{{ request.GET.categoria }}">
+    <input type="hidden" name="clasificacion" value="{{ request.GET.clasificacion }}">
+    <input type="hidden" name="tienda" value="{{ request.GET.tienda }}">
+    <input type="hidden" name="proveedor" value="{{ request.GET.proveedor }}">
+    
+    <!-- Botón para generar el PDF -->
+    <button type="submit" name="generar_pdf" value="1" class="btn btn-success">Generar PDF</button>
+</form>
+
+{% endblock %}

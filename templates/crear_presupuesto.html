@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-2">
+    <h1>Crear Presupuesto</h1>
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="monto_total" class="form-label">Monto total:</label>
+            <input type="number" class="form-control" id="monto_total" name="monto_total" placeholder="{{ form.monto_total.field.widget.attrs.placeholder }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="monto_gastado" class="form-label">Monto gastado:</label>
+            <input type="number" class="form-control" id="monto_gastado" name="monto_gastado" placeholder="{{ form.monto_gastado.field.widget.attrs.placeholder }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Presupuesto</button>
+        <a href="{% url 'proyecto_detalle' pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+{% endblock content %}
