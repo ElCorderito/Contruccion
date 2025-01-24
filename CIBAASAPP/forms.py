@@ -179,6 +179,20 @@ class ReporteForm(forms.Form):
         required=False,  # Opcional
         label='Proveedor'
     )
-
+    
+    # Campo para filtrar por Etapa (opcional)
+    etapa = forms.ModelChoiceField(
+        queryset=Etapa.objects.all(),  # Ajustar según tu modelo
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=False,
+        label='Etapa'
+    )
+    
+    # Barra de búsqueda para Material
+    material_search = forms.CharField(
+        required=False,
+        label='Buscar Material',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de Material'})
+    )
 
 

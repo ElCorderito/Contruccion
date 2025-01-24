@@ -23,16 +23,14 @@ from django.views.generic import DetailView
 from django.views.generic import UpdateView
 from django.views.generic import DeleteView
 from django.db.models import Q
-from django.db.models import Sum
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.core.mail import send_mail
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Sum, Count
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment
 
 ## Login ##
 
@@ -524,7 +522,6 @@ def generar_reporte(request):
     form = ReporteForm(request.GET or None)
     inventarios = Inventario.objects.all()
 
-    # Aplicar filtros si se seleccionaron
     if form.is_valid():
         proyecto = form.cleaned_data.get('proyecto')
         fecha_inicio = form.cleaned_data.get('fecha_inicio')
@@ -533,6 +530,8 @@ def generar_reporte(request):
         clasificacion = form.cleaned_data.get('clasificacion')
         tienda = form.cleaned_data.get('tienda')
         proveedor = form.cleaned_data.get('proveedor')
+        etapa_seleccionada = form.cleaned_data.get('etapa')  # <-- si quieres filtrar por una etapa en específico
+        material_search = form.cleaned_data.get('material_search')
 
         if proyecto:
             inventarios = inventarios.filter(proyecto=proyecto)
@@ -546,18 +545,35 @@ def generar_reporte(request):
             inventarios = inventarios.filter(tienda=tienda)
         if proveedor:
             inventarios = inventarios.filter(proveedor=proveedor)
+        if etapa_seleccionada:
+            inventarios = inventarios.filter(etapa=etapa_seleccionada)
+        if material_search:
+            inventarios = inventarios.filter(material__nombre__icontains=material_search)
 
     total_gasto = inventarios.aggregate(total=Sum('subtotal'))['total'] or 0
 
-    # Mostrar la previsualización en la web
+    # Si deseas obtener TODAS las etapas existentes
+    # (si siempre son 3 fijas, puedes filtrar manualmente)
+    etapas = Etapa.objects.all().order_by('id')  # Ajusta el .order_by si quieres un orden particular
+
+    # Crear una lista/diccionario que relacione "etapa" con los inventarios que se usaron en esa etapa
+    inventarios_por_etapa = []
+    for e in etapas:
+        inv_etapa = inventarios.filter(etapa=e)
+        inventarios_por_etapa.append({
+            'etapa': e,            # El objeto Etapa
+            'inventarios': inv_etapa  # El queryset filtrado
+        })
+
+    # PREVISUALIZACIÓN
     if request.GET.get('preview'):
         return render(request, 'reporte_previa.html', {
             'form': form,
-            'inventarios': inventarios,
-            'total_gasto': total_gasto
+            'inventarios_por_etapa': inventarios_por_etapa,
+            'total_gasto': total_gasto,
         })
 
-    # Generar PDF si el usuario hace clic en "Generar reporte"
+    # GENERAR PDF
     if request.GET.get('generar_pdf'):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="reporte.pdf"'
@@ -566,19 +582,107 @@ def generar_reporte(request):
         p.drawString(100, 750, "Reporte de Gastos")
 
         y = 700
-        for inventario in inventarios:
-            p.drawString(100, y, f"Material: {inventario.material.nombre}, Cantidad: {inventario.cantidad}, Subtotal: {inventario.subtotal}$")
+        # Aquí, si quieres que el PDF también vaya etapa por etapa
+        for data in inventarios_por_etapa:
+            etapa = data['etapa']
+            etapa_inventarios = data['inventarios']
+
+            # Título de la Etapa
+            p.drawString(100, y, f"Etapa: {etapa.nombre}")
             y -= 20
-            if y < 50:  # Asegurarse de que no se salga del rango imprimible
+
+            if not etapa_inventarios.exists():
+                p.drawString(100, y, "No se usaron materiales en esta etapa")
+                y -= 20
+            else:
+                for inv in etapa_inventarios:
+                    text_line = (
+                        f"Material: {inv.material.nombre}, "
+                        f"Cantidad: {inv.cantidad}, "
+                        f"Subtotal: {inv.subtotal}$"
+                    )
+                    p.drawString(100, y, text_line)
+                    y -= 20
+                    if y < 50:
+                        p.showPage()
+                        y = 750
+
+            # Espacio entre etapas
+            y -= 20
+            if y < 50:
                 p.showPage()
                 y = 750
 
+        # Total general
         p.drawString(100, 50, f"Total Gasto: {total_gasto}$")
         p.showPage()
         p.save()
 
         return response
+    
+    # GENERAR EXCEL (nuevo)
+    if request.GET.get('generar_excel'):
+        return generar_excel_response(inventarios_por_etapa, total_gasto)
 
-    return render(request, 'reporte_filtros.html', {'form': form})
+    # SI NO SE HA SELECCIONADO NI preview NI generar_pdf
+    return render(request, 'reporte_filtros.html', {
+        'form': form
+    })
 
 
+def generar_excel_response(inventarios_por_etapa, total_gasto):
+    """Genera el archivo Excel en memoria y lo retorna en un HttpResponse."""
+    # 1. Crear el Workbook
+    wb = Workbook()
+
+    # Por defecto openpyxl crea una hoja llamada "Sheet"; podemos usarla o eliminarla.
+    # Vamos a usarla para un posible resumen general. O la quitamos y creamos siempre nuevas.
+    wb.remove(wb.active)
+
+    # 2. Para cada etapa, creamos una hoja nueva
+    for data in inventarios_por_etapa:
+        etapa = data['etapa']
+        invs = data['inventarios']
+
+        # Nombrar la hoja (máximo 31 caracteres en Excel)
+        sheet_name = (etapa.nombre[:31]) if etapa.nombre else "Etapa"
+        ws = wb.create_sheet(title=sheet_name)
+
+        # Encabezado de columnas
+        headers = ["Material", "Cantidad", "Precio Unitario", "Subtotal", "Fecha", "Tienda", "Proveedor"]
+        for col_num, header in enumerate(headers, start=1):
+            cell = ws.cell(row=1, column=col_num, value=header)
+            cell.font = Font(bold=True)
+            cell.alignment = Alignment(horizontal='center')
+
+        # Contenido
+        row_num = 2
+        for inv in invs:
+            ws.cell(row=row_num, column=1, value=inv.material.nombre)
+            ws.cell(row=row_num, column=2, value=inv.cantidad)
+            ws.cell(row=row_num, column=3, value=inv.precio_unitario)
+            ws.cell(row=row_num, column=4, value=inv.subtotal)
+            ws.cell(row=row_num, column=5, value=str(inv.fecha))  # Convertir a string
+            ws.cell(row=row_num, column=6, value=inv.tienda.nombre if inv.tienda else "-")
+            ws.cell(row=row_num, column=7, value=inv.proveedor.nombre if inv.proveedor else "-")
+            row_num += 1
+
+        # Si no se usaron materiales, puedes poner un mensaje
+        if not invs.exists():
+            ws.cell(row=2, column=1, value="No se usaron materiales en esta etapa")
+
+    # OPCIONAL: Crear una hoja resumen general
+    ws_summary = wb.create_sheet(title="Resumen")
+    ws_summary["A1"] = "Total Gasto"
+    ws_summary["A1"].font = Font(bold=True)
+    ws_summary["B1"] = total_gasto
+
+    # 3. Preparar la respuesta HTTP
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = 'attachment; filename="reporte.xlsx"'
+
+    # 4. Guardar el workbook en la respuesta
+    wb.save(response)
+    return response

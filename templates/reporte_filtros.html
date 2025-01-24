@@ -1,5 +1,5 @@
+<!-- reporte_filtros.html -->
 {% extends 'base.html' %}
-
 {% block content %}
 <h1>Generar Reporte</h1>
 <form method="GET" action=".">
@@ -36,6 +36,16 @@
             <label for="id_proveedor">Proveedor (Opcional):</label>
             {{ form.proveedor }}
         </div>
+        <!-- Nuevo campo de Etapa -->
+        <div class="col-md-4 mb-3">
+            <label for="id_etapa">Etapa (Opcional):</label>
+            {{ form.etapa }}
+        </div>
+        <!-- Barra de búsqueda para Material -->
+        <div class="col-md-4 mb-3">
+            <label for="id_material_search">Buscar Material:</label>
+            {{ form.material_search }}
+        </div>
     </div>
 
     <!-- Botones para previsualizar o generar PDF -->
@@ -44,7 +54,5 @@
         <button type="submit" name="generar_pdf" value="1" class="btn btn-success">Generar PDF</button>
     </div>
 </form>
-
 {% endblock %}
-
 

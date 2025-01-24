@@ -3,38 +3,9 @@
 {% block content %}
 <h1>Previsualización del Reporte</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Material</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Subtotal</th>
-            <th>Fecha</th>
-            <th>Tienda</th>
-            <th>Proveedor</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for inventario in inventarios %}
-        <tr>
-            <td>{{ inventario.material.nombre }}</td>
-            <td>{{ inventario.cantidad }}</td>
-            <td>{{ inventario.precio_unitario }}$</td>
-            <td>{{ inventario.subtotal }}$</td>
-            <td>{{ inventario.fecha }}</td>
-            <td>{{ inventario.tienda.nombre|default_if_none:"-" }}</td>
-            <td>{{ inventario.proveedor.nombre|default_if_none:"-" }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h3>Total Gasto: {{ total_gasto }}$</h3>
-
-<!-- Mantener los filtros y generar el PDF en esta misma página -->
-<form method="GET" action=".">
-    <!-- Mantener los filtros actuales -->
+<!-- Barra de búsqueda arriba -->
+<form method="GET" action="." class="mb-4">
+    <!-- Mantenemos todos los campos ocultos para conservar los filtros actuales -->
     <input type="hidden" name="proyecto" value="{{ request.GET.proyecto }}">
     <input type="hidden" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}">
     <input type="hidden" name="fecha_fin" value="{{ request.GET.fecha_fin }}">
@@ -42,9 +13,90 @@
     <input type="hidden" name="clasificacion" value="{{ request.GET.clasificacion }}">
     <input type="hidden" name="tienda" value="{{ request.GET.tienda }}">
     <input type="hidden" name="proveedor" value="{{ request.GET.proveedor }}">
-    
-    <!-- Botón para generar el PDF -->
-    <button type="submit" name="generar_pdf" value="1" class="btn btn-success">Generar PDF</button>
+    <input type="hidden" name="etapa" value="{{ request.GET.etapa }}">
+
+    <!-- Barra de búsqueda: -->
+    <div class="row">
+        <div class="col-md-4">
+            <label for="material_search">Buscar Material:</label>
+            <input 
+                type="text" 
+                name="material_search" 
+                id="material_search"
+                class="form-control" 
+                placeholder="Nombre de Material" 
+                value="{{ request.GET.material_search|default_if_none:'' }}"
+            >
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" name="preview" value="1" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
 </form>
+
+<!-- Mostramos cada etapa en su propia sección -->
+{% for data in inventarios_por_etapa %}
+    <h2>Etapa: {{ data.etapa.nombre }}</h2>
+
+    {% if data.inventarios.exists %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                    <th>Fecha</th>
+                    <th>Tienda</th>
+                    <th>Proveedor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in data.inventarios %}
+                <tr>
+                    <td>{{ inv.material.nombre }}</td>
+                    <td>{{ inv.cantidad }}</td>
+                    <td>{{ inv.precio_unitario }}$</td>
+                    <td>{{ inv.subtotal }}$</td>
+                    <td>{{ inv.fecha }}</td>
+                    <td>{{ inv.tienda.nombre|default_if_none:"-" }}</td>
+                    <td>{{ inv.proveedor.nombre|default_if_none:"-" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="color: red;">No se usaron materiales en esta etapa.</p>
+    {% endif %}
+    <hr>
+{% endfor %}
+
+<h3>Total Gasto: {{ total_gasto }}$</h3>
+
+<!-- Mantener los filtros y generar el PDF en esta misma página -->
+<!-- reporte_previa.html -->
+<form method="GET" action=".">
+    <!-- Mantener los filtros actuales como campos hidden -->
+    <input type="hidden" name="proyecto" value="{{ request.GET.proyecto }}">
+    <input type="hidden" name="fecha_inicio" value="{{ request.GET.fecha_inicio }}">
+    <input type="hidden" name="fecha_fin" value="{{ request.GET.fecha_fin }}">
+    <input type="hidden" name="categoria" value="{{ request.GET.categoria }}">
+    <input type="hidden" name="clasificacion" value="{{ request.GET.clasificacion }}">
+    <input type="hidden" name="tienda" value="{{ request.GET.tienda }}">
+    <input type="hidden" name="proveedor" value="{{ request.GET.proveedor }}">
+    <input type="hidden" name="etapa" value="{{ request.GET.etapa }}">
+    <input type="hidden" name="material_search" value="{{ request.GET.material_search }}">
+
+    <!-- Botón Generar PDF -->
+    <button type="submit" name="generar_pdf" value="1" class="btn btn-success me-3">
+        Generar PDF
+    </button>
+    
+    <!-- Botón Generar Excel -->
+    <button type="submit" name="generar_excel" value="1" class="btn btn-info">
+        Generar Excel
+    </button>
+</form>
+
 
 {% endblock %}
