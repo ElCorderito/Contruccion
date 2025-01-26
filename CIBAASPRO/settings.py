@@ -116,9 +116,12 @@ TIME_ZONE = 'America/Tijuana'
 
 USE_I18N = True
 USE_L10N = True
-
 USE_TZ = True
 
+# Ubicación donde buscar los módulos de formato
+FORMAT_MODULE_PATH = [
+    'formats',  # Ajusta el nombre a tu proyecto
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

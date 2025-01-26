@@ -23,6 +23,7 @@ urlpatterns = [
     path('materiales/', views.materiales, name='material_lista'),
     path('materiales/<int:pk>/', MaterialUpdateView.as_view(), name='material_editar'),
     path('crear_material/', MaterialCreateView.as_view(), name='crear_material'),
+    path('material/<int:pk>/eliminar/', MaterialDeleteView.as_view(), name='material_eliminar'),
     path('tiendas/', TiendaListaView.as_view(), name='tienda_lista'),
     path('tiendas/<int:pk>/', TiendaUpdateView.as_view(), name='tienda_editar'),
     path('crear_tienda/', TiendaCreateView.as_view(), name='crear_tienda'),

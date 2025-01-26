@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="m-2">
+    <h1>Editar Inventario</h1>
+    
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <!-- MATERIAL -->
+        <div class="mb-3">
+            <label for="id_material" class="form-label">Material:</label>
+            <select class="form-select" id="id_material" name="material">
+                {% for option in form.material.field.queryset %}
+                    <option value="{{ option.pk }}"
+                        {% if option.pk == form.material.value %} selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.material.errors }}
+        </div>
+
+        <!-- PROYECTO -->
+        <div class="mb-3">
+            <label for="id_proyecto" class="form-label">Proyecto:</label>
+            <select class="form-select" id="id_proyecto" name="proyecto">
+                {% for option in form.proyecto.field.queryset %}
+                    <option value="{{ option.pk }}"
+                        {% if option.pk == form.proyecto.value %} selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.proyecto.errors }}
+        </div>
+
+        <!-- ETAPA -->
+        <div class="mb-3">
+            <label for="id_etapa" class="form-label">Etapa:</label>
+            <select class="form-select" id="id_etapa" name="etapa">
+                {% for option in form.etapa.field.queryset %}
+                    <option value="{{ option.pk }}"
+                        {% if option.pk == form.etapa.value %} selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.etapa.errors }}
+        </div>
+
+        <!-- CANTIDAD -->
+        <div class="mb-3">
+            <label for="id_cantidad" class="form-label">Cantidad:</label>
+            <input type="number" class="form-control" id="id_cantidad" name="cantidad"
+                   value="{{ form.cantidad.value|default_if_none:'' }}"
+                   placeholder="{{ form.cantidad.field.widget.attrs.placeholder }}">
+            {{ form.cantidad.errors }}
+        </div>
+
+        <!-- PRECIO UNITARIO -->
+        <div class="mb-3">
+            <label for="id_precio_unitario" class="form-label">Precio Unitario:</label>
+            <input type="number" class="form-control" id="id_precio_unitario" name="precio_unitario"
+                   value="{{ form.precio_unitario.value|default_if_none:'' }}"
+                   placeholder="{{ form.precio_unitario.field.widget.attrs.placeholder }}">
+            {{ form.precio_unitario.errors }}
+        </div>
+
+        <!-- DESCUENTO -->
+        <div class="mb-3">
+            <label for="id_descuento" class="form-label">Descuento (%):</label>
+            <input type="number" class="form-control" id="id_descuento" name="descuento"
+                   value="{{ form.descuento.value|default_if_none:'' }}"
+                   placeholder="{{ form.descuento.field.widget.attrs.placeholder }}">
+            {{ form.descuento.errors }}
+        </div>
+
+        <!-- IVA -->
+        <div class="mb-3">
+            <label for="id_iva" class="form-label">IVA:</label>
+            <select class="form-select" id="id_iva" name="iva">
+                {% for val, display in form.iva.field.choices %}
+                    <option value="{{ val }}"
+                        {% if val == form.iva.value %} selected{% endif %}>
+                        {{ display }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.iva.errors }}
+        </div>
+
+        <!-- TIENDA -->
+        <div class="mb-3">
+            <label for="id_tienda" class="form-label">Tienda:</label>
+            <select class="form-select" id="id_tienda" name="tienda">
+                <option value="">Ninguna</option>
+                {% for option in form.tienda.field.queryset %}
+                    <option value="{{ option.pk }}"
+                        {% if option.pk == form.tienda.value %} selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.tienda.errors }}
+        </div>
+
+        <!-- PROVEEDOR -->
+        <div class="mb-3">
+            <label for="id_proveedor" class="form-label">Proveedor:</label>
+            <select class="form-select" id="id_proveedor" name="proveedor">
+                <option value="">Ninguno</option>
+                {% for option in form.proveedor.field.queryset %}
+                    <option value="{{ option.pk }}"
+                        {% if option.pk == form.proveedor.value %} selected{% endif %}>
+                        {{ option.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.proveedor.errors }}
+        </div>
+
+        <!-- FACTURADO (Checkbox) -->
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input"
+                   id="id_facturado" name="facturado"
+                   {% if form.facturado.value %}checked{% endif %}>
+            <label class="form-check-label" for="id_facturado">¿Está facturado?</label>
+            {{ form.facturado.errors }}
+        </div>
+
+        <!-- FECHA -->
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha de Compra:</label>
+            <input type="date" class="form-control" id="fecha" name="fecha"
+                   value="{{ form.fecha.value }}">
+            {{ form.fecha.errors }}
+        </div>
+
+        <!-- DESCRIPCION -->
+        <div class="mb-3">
+            <label for="id_descripcion" class="form-label">Descripción:</label>
+            <textarea class="form-control" id="id_descripcion" name="descripcion"
+                      placeholder="{{ form.descripcion.field.widget.attrs.placeholder }}"
+                      rows="3">{{ form.descripcion.value }}</textarea>
+            {{ form.descripcion.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{% url 'inventario_lista' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var inputFecha = document.getElementById('fecha');
+        if (!inputFecha.value) {
+            // Si está vacío, asignamos la fecha de hoy
+            var today = new Date().toISOString().split('T')[0];
+            inputFecha.value = today;
+        }
+    });
+</script>
+
+{% endblock content %}

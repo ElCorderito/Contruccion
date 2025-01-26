@@ -31,7 +31,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Unidad</th>
-                        <th>Categoria</th>
+                        <th>Categoría</th>
                         <th>Clasificación</th>
                         <th>Descripción</th>
                         <th>Acciones</th>
@@ -47,10 +47,46 @@
                         <td>{{ material.descripcion }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{% url 'material_editar' material.pk %}" class="btn btn-info">Editar</a>
+                                <a href="{% url 'material_editar' material.pk %}" class="btn btn-info">
+                                    Editar
+                                </a>
+
+                                <!-- Botón que activa el modal para confirmar eliminación -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ material.pk }}">
+                                    Eliminar
+                                </button>
                             </div>
                         </td>
                     </tr>
+
+                    <!-- Modal de confirmación de eliminación -->
+                    <div class="modal fade" id="modalEliminar{{ material.pk }}" tabindex="-1" aria-labelledby="modalEliminarLabel{{ material.pk }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalEliminarLabel{{ material.pk }}">
+                                        Confirmar Eliminación
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Estás seguro de que deseas eliminar el material <strong>"{{ material.nombre }}"</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                    <!-- Form que hace POST a la URL de borrado -->
+                                    <form method="post" action="{% url 'material_eliminar' material.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin del modal -->
+
                     {% endfor %}
                 </tbody>
             </table>

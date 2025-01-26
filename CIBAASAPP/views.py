@@ -32,6 +32,7 @@ from django.db.models import Sum, Count
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment
 
+
 ## Login ##
 
 
@@ -218,6 +219,12 @@ class MaterialCreateView(CreateView):
         # Si el formulario no es válido, agrega un mensaje de error al contexto
         error_message = "Hay errores en el formulario. Por favor, corrígelos."
         return self.render_to_response(self.get_context_data(form=form, error_message=error_message))
+
+
+class MaterialDeleteView(DeleteView):
+    model = Material
+    template_name = 'material_confirm_delete.html'
+    success_url = reverse_lazy('material_lista')
 
 
 ### Tienda ###
