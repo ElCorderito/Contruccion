@@ -33,6 +33,7 @@ urlpatterns = [
     path('crear_clasificacion/', ClasificacionCreateView.as_view(), name='crear_clasificacion'),
     path('clasificacion/', ClasificacionListaView.as_view(), name='clasificacion_lista'),
     path('clasificacion/<int:pk>/', ClasificacionUpdateView.as_view(), name='clasificacion_editar'),
+    path('clasificacion/<int:pk>/eliminar/', ClasificacionDeleteView.as_view(), name='clasificacion_eliminar'),
     
     ## Materiales ##
     

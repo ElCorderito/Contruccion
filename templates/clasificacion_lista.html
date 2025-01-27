@@ -33,8 +33,48 @@
                         <td>{{ clasificacion.descripcion }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{% url 'clasificacion_editar' clasificacion.pk %}" class="btn btn-info">Editar</a>
+                                <a href="{% url 'clasificacion_editar' clasificacion.pk %}" class="btn btn-info me-2">Editar</a>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminar{{ clasificacion.pk }}">
+                                    Eliminar
+                                </button>
                             </div>
+                            
+
+                            <!-- Modal de confirmación (uno por cada clasificacion) -->
+                            <div class="modal fade" id="modalEliminar{{ clasificacion.pk }}" tabindex="-1"
+                                    aria-labelledby="modalEliminarLabel{{ clasificacion.pk }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalEliminarLabel{{ clasificacion.pk }}">
+                                                Eliminar clasificacion
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro de que deseas eliminar esta clasificación?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <!-- Form que hace POST a la URL de borrado -->
+                                            <form method="post"
+                                                    action="{% url 'clasificacion_eliminar' clasificacion.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">
+                                                    Sí, eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fin del modal -->
+
                         </td>
                     </tr>
                     {% endfor %}

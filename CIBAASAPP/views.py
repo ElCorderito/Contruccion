@@ -193,6 +193,11 @@ class ClasificacionUpdateView(UpdateView):
     success_url = reverse_lazy('clasificacion_lista')
 
 
+class ClasificacionDeleteView(DeleteView):
+    model = Clasificacion
+    success_url = reverse_lazy('clasificacion_lista')
+
+
 ### Material ###
 
 
@@ -235,7 +240,6 @@ class MaterialCreateView(CreateView):
 
 class MaterialDeleteView(DeleteView):
     model = Material
-    template_name = 'material_confirm_delete.html'
     success_url = reverse_lazy('material_lista')
 
 
@@ -425,7 +429,6 @@ class InventarioUpdateView(UpdateView):
 
 class InventarioDeleteView(DeleteView):
     model = Inventario
-    template_name = 'inventario_confirm_delete.html'  # No usaremos directamente esta página si hacemos modal
     success_url = reverse_lazy('inventario_lista')
 
 

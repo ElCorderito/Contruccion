@@ -42,8 +42,8 @@
                         <td>{{ proyecto.fecha_fin }}</td>
                         <td>{{ proyecto.descripcion }}</td>
                         <td>
-                            <div class="btn-group" role="group" style="gap: 5px;">
-                                <a href="{% url 'proyecto_detalle' proyecto.pk %}" class="btn btn-info">Ver Detalles</a>
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'proyecto_detalle' proyecto.pk %}" class="btn btn-info me-2">Ver Detalles</a>
                                 <form method="post" action="{% url 'cambiar_estado_proyecto' proyecto.pk %}" onsubmit="return confirm('¿Estás seguro de que quieres marcar este proyecto como terminado?');">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-success">Marcar como Terminado</button>
