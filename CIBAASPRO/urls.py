@@ -11,8 +11,10 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('inicio/', HomeView.as_view(), name='inicio'),
     
+
     ### Proyecto ###
     
+
     path('crear_proyecto/', ProyectoCreateView.as_view(), name='crear_proyecto'),
     path('proyectos/', ProyectoListaView.as_view(), name='proyecto_lista'),
     path('proyectos/cambiar-estado/<int:pk>/', CambiarEstadoProyectoView.as_view(), name='cambiar_estado_proyecto'),
@@ -27,16 +29,21 @@ urlpatterns = [
     path('crear_categoria/', CategoriaCreateView.as_view(), name='crear_categoria'),
     path('categorias/', CategoriaListaView.as_view(), name='categoria_lista'),
     path('categorias/<int:pk>/', CategoriaUpdateView.as_view(), name='categoria_editar'),
+    path('categoria/<int:pk>/eliminar/', CategoriaDeleteView.as_view(), name='categoria_eliminar'),
     
+
     ## Clasificacion ##
     
+
     path('crear_clasificacion/', ClasificacionCreateView.as_view(), name='crear_clasificacion'),
     path('clasificacion/', ClasificacionListaView.as_view(), name='clasificacion_lista'),
     path('clasificacion/<int:pk>/', ClasificacionUpdateView.as_view(), name='clasificacion_editar'),
     path('clasificacion/<int:pk>/eliminar/', ClasificacionDeleteView.as_view(), name='clasificacion_eliminar'),
     
+
     ## Materiales ##
     
+
     path('materiales/', views.materiales, name='material_lista'),
     path('materiales/<int:pk>/', MaterialUpdateView.as_view(), name='material_editar'),
     path('crear_material/', MaterialCreateView.as_view(), name='crear_material'),
@@ -44,16 +51,22 @@ urlpatterns = [
     
     ## Tiendas ##
     
+
     path('tiendas/', TiendaListaView.as_view(), name='tienda_lista'),
     path('tiendas/<int:pk>/', TiendaUpdateView.as_view(), name='tienda_editar'),
     path('crear_tienda/', TiendaCreateView.as_view(), name='crear_tienda'),
-    
+    path('tienda/<int:pk>/eliminar/', TiendaDeleteView.as_view(), name='tienda_eliminar'),
+
+
     ## Proveedores ##
+
 
     path('proveedores/', ProveedorListaView.as_view(), name='proveedor_lista'),
     path('proveedores/<int:pk>/', ProveedorUpdateView.as_view(), name='proveedor_editar'),
     path('crear_proveedores/', ProveedorCreateView.as_view(), name='crear_proveedor'),
-    
+    path('proveedores/<int:pk>/eliminar/', ProveedorDeleteView.as_view(), name='proveedor_eliminar'),
+
+
     ## Fases ##
     
     path('fases/', FaseListaView.as_view(), name='fase_lista'),

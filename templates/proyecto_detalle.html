@@ -33,41 +33,54 @@
         <a href="{% url 'crear_presupuesto' proyecto.pk %}" class="btn btn-primary">Crear presupuesto</a>
     {% endif %}
 
-    <!-- Documentos del proyecto con mejor estilo y nombre del archivo -->
-    <div class="d-flex justify-content-between align-items-center">
-        <h2 class="mt-4">Documentos del Proyecto</h2>
-        <a href="{% url 'subir_documento' proyecto.pk %}" class="btn btn-outline-success">Añadir Documento</a>
-    </div>
+<!-- Documentos del proyecto con mejor estilo y nombre del archivo -->
+<div class="d-flex justify-content-between align-items-center">
+    <h2 class="mt-4">Documentos del Proyecto</h2>
+    <a href="{% url 'subir_documento' proyecto.pk %}" class="btn btn-outline-success">Añadir Documento</a>
+</div>
 
-    <div class="card mt-3">
-        <div class="card-header">
-            <h4 class="mb-0">Lista de Documentos</h4>
-        </div>
-        <ul class="list-group list-group-flush">
-            {% for documento in documentos %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">{{ documento.descripcion|default_if_none:"Sin descripción" }}</h5>
-                    <small class="mb-0"><strong>Archivo:</strong> {{ documento.documento.name }}</p> <!-- Nombre del archivo -->
-                    <small class="text-muted">Subido el: {{ documento.fecha_subida }}</small>
-                </div>
-                <a href="{{ documento.documento.url }}" class="btn btn-outline-primary">Ver Documento</a>
-            </li>
-            {% empty %}
-            <li class="list-group-item">
-                <div class="text-center">
-                    <p class="mb-1">No hay documentos disponibles para este proyecto.</p>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
+<div class="card mt-3">
+    <div class="card-header">
+        <h4 class="mb-0">Lista de Documentos</h4>
     </div>
+    <ul class="list-group list-group-flush">
+        {% for documento in documentos %}
+        <!-- Usamos d-flex flex-wrap para que se comporte mejor en pantallas pequeñas -->
+        <li class="list-group-item d-flex flex-wrap justify-content-between align-items-center">
+            <div>
+                <!-- Título / Descripción -->
+                <h5 class="mb-1">
+                    {{ documento.descripcion|default_if_none:"Sin descripción" }}
+                </h5>
+                <!-- Nombre del archivo -->
+                <small class="mb-0 d-block">
+                    <strong>Archivo:</strong> {{ documento.documento.name }}
+                </small>
+                <!-- Fecha de subida -->
+                <small class="text-muted d-block">
+                    Subido el: {{ documento.fecha_subida }}
+                </small>
+            </div>
+            <!-- Botón de ver documento; notamos mt-2 en pantallas XS para que no quede tan pegado -->
+            <a href="{{ documento.documento.url }}" class="btn btn-outline-primary mt-2 mt-sm-0">
+                Ver Documento
+            </a>
+        </li>
+        {% empty %}
+        <li class="list-group-item">
+            <div class="text-center">
+                <p class="mb-1">No hay documentos disponibles para este proyecto.</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 
 
     <!-- Inventario del Proyecto (con paginación) -->
     <h2 class="mt-4">Inventario del Proyecto</h2>
     {% if inventarios %}
-        <div class="table-responsive">
+        <div class="m-2 table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -117,6 +130,3 @@
     </div>
 </div>
 {% endblock %}
-
-
-

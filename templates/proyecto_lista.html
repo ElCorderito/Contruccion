@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<div class="m-2">
+<div class="m-2 table-responsive">
     <div class="col-md-12">
         <h2>Proyectos en Proceso</h2>
         {% if proyectos_en_proceso %}
@@ -44,14 +44,49 @@
                         <td>
                             <div class="btn-group" role="group">
                                 <a href="{% url 'proyecto_detalle' proyecto.pk %}" class="btn btn-info me-2">Ver Detalles</a>
-                                <form method="post" action="{% url 'cambiar_estado_proyecto' proyecto.pk %}" onsubmit="return confirm('¿Estás seguro de que quieres marcar este proyecto como terminado?');">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success">Marcar como Terminado</button>
-                                </form>
+                                
+                                <!-- Botón que abre el modal de confirmación -->
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#modalTerminar{{ proyecto.pk }}">
+                                    Marcar como Terminado
+                                </button>
                             </div>
                         </td>
                     </tr>
+                    
+                    <!-- Modal de confirmación (uno por cada proyecto) -->
+                    <div class="modal fade" id="modalTerminar{{ proyecto.pk }}" tabindex="-1"
+                         aria-labelledby="modalTerminarLabel{{ proyecto.pk }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTerminarLabel{{ proyecto.pk }}">
+                                        Confirmar Terminación
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Estás seguro de que deseas marcar el proyecto 
+                                    <strong>{{ proyecto.nombre }}</strong> como terminado?
+                                </div>
+                                <div class="modal-footer">
+                                    <!-- Botón para cerrar el modal -->
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                    <form method="post" action="{% url 'cambiar_estado_proyecto' proyecto.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success">
+                                            Sí, terminar
+                                        </button>
+                                    </form>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin del modal -->
                     {% endfor %}
+                    
                 </tbody>
             </table>
         {% else %}
@@ -108,4 +143,3 @@
 </script>
 
 {% endblock content %}
-

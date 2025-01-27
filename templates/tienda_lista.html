@@ -15,7 +15,7 @@
         </div>
     </div>
 </div>
-<div class="m-2">
+<div class="m-2 table-responsive">
     <div class="col-md-12">
         {% if tiendas %}
             <table class="table table-striped">
@@ -35,8 +35,46 @@
                         <td>{{ tienda.descripcion }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{% url 'tienda_editar' tienda.pk %}" class="btn btn-info">Editar</a>
+                                <a href="{% url 'tienda_editar' tienda.pk %}" class="btn btn-info me-2">Editar</a>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminar{{ tienda.pk }}">
+                                    Eliminar
+                                </button>
                             </div>
+                            <!-- Modal de confirmación (uno por cada tienda) -->
+                            <div class="modal fade" id="modalEliminar{{ tienda.pk }}" tabindex="-1"
+                                    aria-labelledby="modalEliminarLabel{{ tienda.pk }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalEliminarLabel{{ tienda.pk }}">
+                                                Eliminar tienda
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro de que deseas eliminar esta tienda?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <!-- Form que hace POST a la URL de borrado -->
+                                            <form method="post"
+                                                    action="{% url 'tienda_eliminar' tienda.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">
+                                                    Sí, eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fin del modal -->
+
                         </td>
                     </tr>
                     {% endfor %}

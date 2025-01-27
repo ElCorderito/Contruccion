@@ -159,6 +159,10 @@ class CategoriaUpdateView(UpdateView):
     success_url = reverse_lazy('categoria_lista')
 
 
+class CategoriaDeleteView(DeleteView):
+    model = Categoria
+    success_url = reverse_lazy('categoria_lista')
+
 ### Clasificación ###
 
 
@@ -277,6 +281,10 @@ class TiendaCreateView(CreateView):
         return self.render_to_response(self.get_context_data(form=form, error_message=error_message))
 
 
+class TiendaDeleteView(DeleteView):
+    model = Tienda
+    success_url = reverse_lazy('tienda_lista')
+
 ### Proveedores ###
 
 
@@ -310,6 +318,10 @@ class ProveedorCreateView(CreateView):
         error_message = "Hay errores en el formulario. Por favor, corrígelos."
         return self.render_to_response(self.get_context_data(form=form, error_message=error_message))
 
+
+class ProveedorDeleteView(DeleteView):
+    model = Proveedor
+    success_url = reverse_lazy('proveedor_lista')
 
 
 ### Fase ###

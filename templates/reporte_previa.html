@@ -34,42 +34,46 @@
     </div>
 </form>
 
-<!-- Mostramos cada etapa en su propia sección -->
-{% for data in inventarios_por_etapa %}
-    <h2>Etapa: {{ data.etapa.nombre }}</h2>
+<div class="m-2 table-responsive">
+    <div class="col-md-12">
+    <!-- Mostramos cada etapa en su propia sección -->
+    {% for data in inventarios_por_etapa %}
+        <h2>Etapa: {{ data.etapa.nombre }}</h2>
 
-    {% if data.inventarios.exists %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Material</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Subtotal</th>
-                    <th>Fecha</th>
-                    <th>Tienda</th>
-                    <th>Proveedor</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for inv in data.inventarios %}
-                <tr>
-                    <td>{{ inv.material.nombre }}</td>
-                    <td>{{ inv.cantidad }}</td>
-                    <td>{{ inv.precio_unitario }}$</td>
-                    <td>{{ inv.subtotal }}$</td>
-                    <td>{{ inv.fecha }}</td>
-                    <td>{{ inv.tienda.nombre|default_if_none:"-" }}</td>
-                    <td>{{ inv.proveedor.nombre|default_if_none:"-" }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p style="color: red;">No se usaron materiales en esta etapa.</p>
-    {% endif %}
-    <hr>
-{% endfor %}
+        {% if data.inventarios.exists %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Fecha</th>
+                        <th>Tienda</th>
+                        <th>Proveedor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in data.inventarios %}
+                    <tr>
+                        <td>{{ inv.material.nombre }}</td>
+                        <td>{{ inv.cantidad }}</td>
+                        <td>{{ inv.precio_unitario }}$</td>
+                        <td>{{ inv.subtotal }}$</td>
+                        <td>{{ inv.fecha }}</td>
+                        <td>{{ inv.tienda.nombre|default_if_none:"-" }}</td>
+                        <td>{{ inv.proveedor.nombre|default_if_none:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: red;">No se usaron materiales en esta etapa.</p>
+        {% endif %}
+        <hr>
+    {% endfor %}
+    </div>
+</div>
 
 <h3>Total Gasto: {{ total_gasto }}$</h3>
 
