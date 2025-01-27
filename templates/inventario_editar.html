@@ -60,6 +60,7 @@
         <div class="mb-3">
             <label for="id_cantidad" class="form-label">Cantidad:</label>
             <input type="number" class="form-control" id="id_cantidad" name="cantidad"
+                   step="1.0"
                    value="{{ form.cantidad.value|default_if_none:'' }}"
                    placeholder="{{ form.cantidad.field.widget.attrs.placeholder }}">
             {{ form.cantidad.errors }}
@@ -69,6 +70,7 @@
         <div class="mb-3">
             <label for="id_precio_unitario" class="form-label">Precio Unitario:</label>
             <input type="number" class="form-control" id="id_precio_unitario" name="precio_unitario"
+                   step="0.1"
                    value="{{ form.precio_unitario.value|default_if_none:'' }}"
                    placeholder="{{ form.precio_unitario.field.widget.attrs.placeholder }}">
             {{ form.precio_unitario.errors }}
@@ -78,6 +80,7 @@
         <div class="mb-3">
             <label for="id_descuento" class="form-label">Descuento (%):</label>
             <input type="number" class="form-control" id="id_descuento" name="descuento"
+                   step="0.1"
                    value="{{ form.descuento.value|default_if_none:'' }}"
                    placeholder="{{ form.descuento.field.widget.attrs.placeholder }}">
             {{ form.descuento.errors }}

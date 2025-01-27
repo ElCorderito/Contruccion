@@ -411,6 +411,12 @@ class InventarioUpdateView(UpdateView):
     success_url = reverse_lazy('inventario_lista')
 
 
+class InventarioDeleteView(DeleteView):
+    model = Inventario
+    template_name = 'inventario_confirm_delete.html'  # No usaremos directamente esta página si hacemos modal
+    success_url = reverse_lazy('inventario_lista')
+
+
 ## Presupuesto ##
 
 
