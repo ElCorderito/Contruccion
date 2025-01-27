@@ -113,6 +113,18 @@ def proyecto_detalle(request, pk):
     return render(request, 'proyecto_detalle.html', context)
 
 
+class ProyectoConfirmDeleteView(DetailView):
+    model = Proyecto
+    template_name = 'proyecto_confirm_delete.html'
+    context_object_name = 'proyecto'
+
+
+class ProyectoDeleteView(DeleteView):
+    model = Proyecto
+    template_name = 'proyecto_delete.html'  # (Podrías no usarlo si vas 100% con modal)
+    success_url = reverse_lazy('proyecto_lista')
+
+
 ### Categoria ###
 
 

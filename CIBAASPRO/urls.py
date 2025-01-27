@@ -18,7 +18,10 @@ urlpatterns = [
     path('proyectos/cambiar-estado/<int:pk>/', CambiarEstadoProyectoView.as_view(), name='cambiar_estado_proyecto'),
     path('proyecto/<int:pk>/', views.proyecto_detalle, name='proyecto_detalle'),
     path('proyecto/<int:pk>/', ProyectoDetalleView.as_view(), name='proyecto_detalle'),
-
+    path('proyecto/<int:pk>/confirmar_eliminar/', ProyectoConfirmDeleteView.as_view(), name='proyecto_confirmar_eliminar'),
+    path('proyecto/<int:pk>/eliminar/', ProyectoDeleteView.as_view(), name='proyecto_eliminar'),
+    
+    
     ## Categoria ##
     
     path('crear_categoria/', CategoriaCreateView.as_view(), name='crear_categoria'),

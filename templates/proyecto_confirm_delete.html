@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="m-2">
+    <h1>Confirmar Eliminación</h1>
+    <p>¿Estás seguro de que deseas eliminar el proyecto <strong>{{ proyecto.nombre }}</strong>?</p>
+    
+    <!-- Botón "Borrar" que dispara el modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+            data-bs-target="#modalEliminarProyecto">
+        Borrar Proyecto
+    </button>
+    
+    <!-- Botón "Cancelar" para volver a detalles (o a la lista) -->
+    <a href="{% url 'proyecto_detalle' proyecto.pk %}" class="btn btn-secondary">
+        Cancelar
+    </a>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="modalEliminarProyecto" tabindex="-1"
+     aria-labelledby="modalEliminarProyectoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEliminarProyectoLabel">¿Eliminar Proyecto?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                Esta acción no se puede deshacer. ¿Deseas continuar?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <!-- Form que hace POST al endpoint de borrado -->
+                <form method="post" action="{% url 'proyecto_eliminar' proyecto.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

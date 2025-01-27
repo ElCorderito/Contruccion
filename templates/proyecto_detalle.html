@@ -109,6 +109,12 @@
     {% else %}
         <p>No hay inventarios asociados con este proyecto.</p>
     {% endif %}
+    <!-- Botón al final -->
+    <div class="mt-4">
+        <a href="{% url 'proyecto_confirmar_eliminar' proyecto.pk %}" class="btn btn-danger">
+            Eliminar este Proyecto
+        </a>
+    </div>
 </div>
 {% endblock %}
 
