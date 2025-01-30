@@ -6,7 +6,7 @@
 
 ![Inicio](static/mark_read/ciba_proy.png)
 
-![Inicio](static/mark_read/ciba_fase_nueva.png)
+![Inicio](static/mark_read/ciba_fase_nuev.png)
 
 ![Inicio](static/mark_read/ciba_etapa.png)
 
@@ -28,4 +28,4 @@
 
 ![Inicio](static/mark_read/ciba_editar_mate.png)
 
-![Inicio](static/mark_read/ciba_cate_nuevo_.png)
+![Inicio](static/mark_read/ciba_cate_nuevo.png)
