@@ -358,6 +358,11 @@ class FaseCreateView(CreateView):
         return self.render_to_response(self.get_context_data(form=form, error_message=error_message))
 
 
+class FaseDeleteView(DeleteView):
+    model = Fase
+    success_url = reverse_lazy('fase_lista')
+
+
 ### Etapa ###
 
 

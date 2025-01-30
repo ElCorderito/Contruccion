@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<div class="m-2">
+<div class="m-2 table-responsive">
     <div class="col-md-12">
         {% if fases %}
             <table class="table table-striped">
@@ -38,8 +38,47 @@
                         <td>{{ fase.descripcion }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{% url 'fase_editar' fase.pk %}" class="btn btn-info">Editar</a>
+                                <a href="{% url 'fase_editar' fase.pk %}" class="btn btn-info me-2">Editar</a>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminar{{ fase.pk }}">
+                                    Eliminar
+                                </button>
                             </div>
+
+                            <!-- Modal de confirmación (uno por cada fase) -->
+                            <div class="modal fade" id="modalEliminar{{ fase.pk }}" tabindex="-1"
+                                    aria-labelledby="modalEliminarLabel{{ fase.pk }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalEliminarLabel{{ fase.pk }}">
+                                                Eliminar fase
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro de que deseas eliminar esta fase?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <!-- Form que hace POST a la URL de borrado -->
+                                            <form method="post"
+                                                    action="{% url 'fase_eliminar' fase.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">
+                                                    Sí, eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fin del modal -->
+
                         </td>
                     </tr>
                     {% endfor %}

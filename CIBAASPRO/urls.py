@@ -72,6 +72,7 @@ urlpatterns = [
     path('fases/', FaseListaView.as_view(), name='fase_lista'),
     path('fases/<int:pk>/', FaseUpdateView.as_view(), name='fase_editar'),
     path('crear_fases/', FaseCreateView.as_view(), name='crear_fase'),
+    path('fases/<int:pk>/eliminar/', FaseDeleteView.as_view(), name='fase_eliminar'),
     
     ## Etapas ##
     
