@@ -6,7 +6,7 @@
     <br>
     <div class="d-flex justify-content-between">
         <div class="btn-group" style="gap: 5px;">
-            <a href="{% url 'fase_lista' %}" class="btn btn-secondary">Regresar a fases</a>
+            <a href="{% url 'etapa_lista' %}" class="btn btn-secondary">Regresar a etapas</a>
             <a href="{% url 'proyecto_lista' %}" class="btn btn-secondary">Regresar a proyecto</a>
         </div>
     </div>
@@ -27,7 +27,7 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Fase</th>
+                        <th>Etapa</th>
                         <th>Descripción</th>
                         <th>Acciones</th>
                     </tr>
@@ -36,12 +36,50 @@
                     {% for etapa in etapas %}
                     <tr>
                         <td>{{ etapa.nombre }}</td>
-                        <td>{{ etapa.fase }}</td>
+                        <td>{{ etapa.etapa }}</td>
                         <td>{{ etapa.descripcion }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{% url 'etapa_editar' etapa.pk %}" class="btn btn-info">Editar</a>
+                                <a href="{% url 'etapa_editar' etapa.pk %}" class="btn btn-info me-2">Editar</a>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminar{{ etapa.pk }}">
+                                    Eliminar
+                                </button>
                             </div>
+
+                            <!-- Modal de confirmación (uno por cada etapa) -->
+                            <div class="modal fade" id="modalEliminar{{ etapa.pk }}" tabindex="-1"
+                                    aria-labelledby="modalEliminarLabel{{ etapa.pk }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalEliminarLabel{{ etapa.pk }}">
+                                                Eliminar etapa
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro de que deseas eliminar esta etapa?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <!-- Form que hace POST a la URL de borrado -->
+                                            <form method="post"
+                                                    action="{% url 'etapa_eliminar' etapa.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">
+                                                    Sí, eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fin del modal -->
                         </td>
                     </tr>
                     {% endfor %}

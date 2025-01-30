@@ -79,7 +79,8 @@ urlpatterns = [
     path('etapas/', EtapaListaView.as_view(), name='etapa_lista'),
     path('etapas/<int:pk>/', EtapaUpdateView.as_view(), name='etapa_editar'),
     path('crear_etapas/', EtapaCreateView.as_view(), name='crear_etapa'),
-    
+    path('etapas/<int:pk>/eliminar/', EtapaDeleteView.as_view(), name='etapa_eliminar'),
+
     ## Inventario ##
 
     path('inventario/', InventarioListaView.as_view(), name='inventario_lista'),

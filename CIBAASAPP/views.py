@@ -397,6 +397,11 @@ class EtapaCreateView(CreateView):
         return self.render_to_response(self.get_context_data(form=form, error_message=error_message))
 
 
+class EtapaDeleteView(DeleteView):
+    model = Etapa
+    success_url = reverse_lazy('etapa_lista')
+
+
 ### Inventario ###
 
 
