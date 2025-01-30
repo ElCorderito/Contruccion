@@ -6,9 +6,9 @@
 
 ![Inicio](static/mark_read/ciba_proy.png)
 
-![Inicio](static/mark_read/ciba_fases.png)
+![Inicio](static/mark_read/ciba_fase_nueva.png)
 
-![Inicio](static/mark_read/ciba_ta.png)
+![Inicio](static/mark_read/ciba_etapa.png)
 
 ![Inicio](static/mark_read/ciba_crear_prot.png)
 
